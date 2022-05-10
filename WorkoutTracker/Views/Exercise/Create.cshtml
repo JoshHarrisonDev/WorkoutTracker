@@ -1,0 +1,28 @@
+﻿@model WorkoutTracker.Models.ExerciseWorkout
+
+@{
+    ViewBag.Title = "Create Exercise";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<form asp-action="Create">
+    <div class="form-group">
+        <label asp-for="@Model.ExerciseName"></label>
+        <div class="col-10">
+            <input class="form-control" asp-for="@Model.ExerciseName" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="@Model.Workout"></label>
+        <div class="col-10">
+            @Html.DropDownListFor(model => model.Workout, (List<SelectListItem>)ViewBag.WorkoutList)
+
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-10">
+            <input type="submit" value="Create" asp-controller="Exercise" />
+        </div>
+    </div>
+</form>
