@@ -8,3 +8,5 @@ Create a workout
 Create an exercise for a workout
 
 Create sets for an exercise
+
+Uses MSSQL Server and Entity Framework to store Data
