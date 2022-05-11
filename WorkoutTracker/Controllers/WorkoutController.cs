@@ -68,10 +68,12 @@ namespace WorkoutTracker.Controllers
         // POST: WorkoutController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(Workout workout)
         {
             try
             {
+
+                _workoutService.UpdateWorkout(workout);
                 return RedirectToAction(nameof(Index));
             }
             catch
