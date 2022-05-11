@@ -32,6 +32,7 @@
             @foreach (var exercise in Model.Exercises)
             {
                 <p>@exercise.Name</p>
+                <a asp-action="Create" asp-controller="Set" asp-route-id="@exercise.ID">Add Set</a>
 
                 <table class="table table-striped">
                     <tr class="col-sm-2">
@@ -52,6 +53,7 @@
                             <td>
                                 @set.Reps
                             </td>
+
                         </tr>
                     }
 

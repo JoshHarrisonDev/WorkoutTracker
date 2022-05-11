@@ -1,0 +1,42 @@
+﻿@model WorkoutTracker.Models.ExerciseSet
+
+@{
+    ViewBag.Title = "Add Set";
+}
+
+
+<div class="container">
+
+    <h1>@ViewBag.Title</h1>
+
+
+    <h3>Exercise ID: @Model.ExerciseID</h3>
+    <br />
+    <h3>Exercise Name: @Model.ExerciseName</h3>
+    <form asp-action="Create">
+
+        @Html.HiddenFor(Model => Model.WorkoutID)
+        @Html.HiddenFor(Model => Model.ExerciseID)
+
+        <div class="form-group">
+            <label asp-for="@Model.Weight"></label>
+            <div class="col-10">
+                <input class="form-control" asp-for="@Model.Weight" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="@Model.Reps"></label>
+            <div class="col-10">
+                <input class="form-control" asp-for="@Model.Reps" />
+
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-10">
+                <input type="submit" value="Create" asp-controller="Set" />
+            </div>
+        </div>
+    </form>
+
+</div>
+

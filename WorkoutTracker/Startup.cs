@@ -46,6 +46,8 @@ namespace WorkoutTracker
 
             services.AddScoped<IExerciseService, ExerciseService>();
 
+            services.AddScoped<ISetService, SetService>();
+
 
 
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)

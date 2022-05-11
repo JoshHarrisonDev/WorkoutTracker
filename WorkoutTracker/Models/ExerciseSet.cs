@@ -6,13 +6,18 @@ using WorkoutTracker.Data.Models;
 
 namespace WorkoutTracker.Models
 {
-    public class ExerciseWorkout
+    public class ExerciseSet
     {
-        public int ID { get; set; }
+        public int ExerciseID { get; set; }
 
         public string ExerciseName { get; set; }
 
-        public int Workout { get; set; }
+        public int WorkoutID { get; set; }
+
+
+        public int Reps { get; set; }
+
+        public int Weight { get; set; }
 
     }
 }
