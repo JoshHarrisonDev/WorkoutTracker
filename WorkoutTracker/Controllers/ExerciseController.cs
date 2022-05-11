@@ -70,17 +70,32 @@ namespace WorkoutTracker.Controllers
         // GET: ExerciseController/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            Exercise exercise = _exerciseService.GetExercise(id);
+            return View(exercise);
         }
 
         // POST: ExerciseController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(Exercise exercise)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+
+
+                _exerciseService.UpdateExercise(exercise);
+                IList<Workout> workouts = _workoutService.GetWorkouts();
+                foreach (var workout in workouts)
+                {
+                    foreach (var e in workout.Exercises)
+                    {
+                        if (e.ID == exercise.ID)
+                        {
+                            return RedirectToAction("Details", "Workout", new { ID = workout.ID });
+                        }
+                    }
+                }
+                return RedirectToAction("Detail", "Workout");
             }
             catch
             {
@@ -91,16 +106,29 @@ namespace WorkoutTracker.Controllers
         // GET: ExerciseController/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            Exercise exercise = _exerciseService.GetExercise(id);
+            return View(exercise);
         }
 
         // POST: ExerciseController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult Delete(Exercise exercise)
         {
             try
             {
+                IList<Workout> workouts = _workoutService.GetWorkouts();
+                foreach (var workout in workouts)
+                {
+                    foreach (var e in workout.Exercises)
+                    {
+                        if (e.ID == exercise.ID)
+                        {
+                            _exerciseService.RemoveExercise(exercise.ID);
+                            return RedirectToAction("Details", "Workout", new { ID = workout.ID });
+                        }
+                    }
+                }
                 return RedirectToAction(nameof(Index));
             }
             catch
