@@ -61,7 +61,8 @@ namespace WorkoutTracker.Controllers
         // GET: WorkoutController/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            var workout = _workoutService.GetWorkout(id);
+            return View(workout);
         }
 
         // POST: WorkoutController/Edit/5
@@ -82,7 +83,8 @@ namespace WorkoutTracker.Controllers
         // GET: WorkoutController/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            var workout = _workoutService.GetWorkout(id);
+            return View(workout);
         }
 
         // POST: WorkoutController/Delete/5
@@ -92,6 +94,7 @@ namespace WorkoutTracker.Controllers
         {
             try
             {
+                _workoutService.DeleteWorkout(id);
                 return RedirectToAction(nameof(Index));
             }
             catch
