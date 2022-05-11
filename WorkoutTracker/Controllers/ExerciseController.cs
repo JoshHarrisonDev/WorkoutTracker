@@ -36,21 +36,15 @@ namespace WorkoutTracker.Controllers
         }
 
         // GET: ExerciseController/Create
-        public ActionResult Create()
+        public ActionResult Create(int ID)
         {
-            List<SelectListItem> workoutList = new List<SelectListItem>();
-            IList<Workout> workouts = _workoutService.GetWorkouts();
-            foreach (var workout in workouts)
+            Workout workout = _workoutService.GetWorkout(ID);
+            ExerciseWorkout exerciseWorkout = new ExerciseWorkout()
             {
-                workoutList.Add(new SelectListItem()
-                {
-                    Text = workout.Name,
-                    Value = workout.ID.ToString(),
-                    Selected = workout.Name == workouts[0].Name ? true : false
-                });
-            }
-            ViewBag.WorkoutList = workoutList;
-            return View();
+                Workout = ID,
+                WorkoutName = workout.Name
+            };
+            return View(exerciseWorkout);
         }
 
         // POST: ExerciseController/Create
