@@ -116,29 +116,35 @@ namespace WorkoutTracker.Controllers
         public ActionResult Delete(int id)
         {
             Exercise exercise = _exerciseService.GetExercise(id);
-            return View(exercise);
+            IList<Workout> workouts = _workoutService.GetWorkouts();
+
+            ExerciseWorkout exerciseWorkout = new ExerciseWorkout();
+            foreach (var workout in workouts)
+            {
+                foreach (var e in workout.Exercises)
+                {
+                    if (e.ID == exercise.ID)
+                    {
+                        exerciseWorkout.ExerciseName = exercise.Name;
+                        exerciseWorkout.ID = exercise.ID;
+                        exerciseWorkout.Workout = workout.ID;
+                    }
+                }
+            }
+
+            return View(exerciseWorkout);
         }
 
         // POST: ExerciseController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(Exercise exercise)
+        public ActionResult Delete(ExerciseWorkout exerciseWorkout)
         {
             try
             {
-                IList<Workout> workouts = _workoutService.GetWorkouts();
-                foreach (var workout in workouts)
-                {
-                    foreach (var e in workout.Exercises)
-                    {
-                        if (e.ID == exercise.ID)
-                        {
-                            _exerciseService.RemoveExercise(exercise.ID);
-                            return RedirectToAction("Details", "Workout", new { ID = workout.ID });
-                        }
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+
+                _exerciseService.RemoveExercise(exerciseWorkout.ID);
+                return RedirectToAction("Details", "Workout", new { ID = exerciseWorkout.Workout });
             }
             catch
             {
