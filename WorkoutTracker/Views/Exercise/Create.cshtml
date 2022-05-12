@@ -22,4 +22,9 @@
             <input type="submit" value="Create" asp-controller="Exercise" />
         </div>
     </div>
+    <div class="row">
+        <div class="col">
+            <a class="btn btn-danger" asp-controller="Workout" asp-action="Details" asp-route-id="@Model.Workout">Cancel</a>
+        </div>
+    </div>
 </form>

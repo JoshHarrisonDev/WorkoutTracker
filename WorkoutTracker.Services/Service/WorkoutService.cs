@@ -10,11 +10,13 @@ namespace WorkoutTracker.Services.Service
     public class WorkoutService : IWorkoutService
     {
         private WorkoutContext _context;
+        private IUserService _userService;
 
 
-        public WorkoutService(WorkoutContext context)
+        public WorkoutService(WorkoutContext context, IUserService userService)
         {
             _context = context;
+            _userService = userService;
 
         }
 
@@ -22,6 +24,12 @@ namespace WorkoutTracker.Services.Service
         {
             _context.Add(workout);
             _context.SaveChanges();
+        }
+
+        public void AddWorkoutUser(User user, Workout workout)
+        {
+            user.Workouts.Add(workout);
+            AddWorkout(workout);
         }
 
         public void DeleteWorkout(int ID)
@@ -43,6 +51,20 @@ namespace WorkoutTracker.Services.Service
 
 
             return _context.Workout.Include(w => w.Exercises).ThenInclude(e => e.Sets).ToList();
+        }
+
+        public IList<Workout> GetWorkoutsUser(int ID)
+        {
+            User user = _userService.GetUser(ID);
+            return user.Workouts.ToList();
+        
+
+        }
+
+        public Workout GetWorkoutUser(int userID, int workoutID)
+        {
+            IList<Workout> userWorkouts = GetWorkoutsUser(userID);
+            return userWorkouts.FirstOrDefault(w => w.ID == workoutID);
         }
 
         public void UpdateWorkout(Workout workout)

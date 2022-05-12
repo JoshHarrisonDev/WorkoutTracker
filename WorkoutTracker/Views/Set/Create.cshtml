@@ -36,7 +36,12 @@
                 <input type="submit" value="Create" asp-controller="Set" />
             </div>
         </div>
+        <div class="row">
+            <div class="col">
+                <a class="btn btn-danger" asp-controller="Workout" asp-action="Details" asp-route-id="@Model.WorkoutID">Cancel</a>
+            </div>
+        </div>
     </form>
-
+    
 </div>
 

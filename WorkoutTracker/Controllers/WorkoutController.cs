@@ -26,6 +26,11 @@ namespace WorkoutTracker.Controllers
             var workouts = _workoutService.GetWorkouts();
             return View(workouts);
         }
+        public ActionResult MyWorkouts(int ID)
+        {
+            var workouts = _workoutService.GetWorkoutsUser(ID);
+            return View(workouts);
+        }
 
         // GET: WorkoutController/Details/5
         public ActionResult Details(int id)

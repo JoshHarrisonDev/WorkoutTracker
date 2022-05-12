@@ -15,7 +15,8 @@ using WorkoutTracker.Data;
 
 using WorkoutTracker.Services.IService;
 using WorkoutTracker.Services.Service;
-
+using Microsoft.AspNetCore.Session;
+using Microsoft.EntityFrameworkCore.Proxies;
 namespace WorkoutTracker
 {
     public class Startup
@@ -37,7 +38,7 @@ namespace WorkoutTracker
             services.AddDatabaseDeveloperPageExceptionFilter();
 
             services.AddDbContext<WorkoutContext>(options =>
-               options.UseSqlServer(
+               options.UseLazyLoadingProxies().UseSqlServer(
                    Configuration.GetConnectionString("WorkoutConnection")));
 
             services.AddScoped<DbContext, WorkoutContext>();
@@ -48,8 +49,11 @@ namespace WorkoutTracker
 
             services.AddScoped<ISetService, SetService>();
 
+            services.AddScoped<IUserService, UserService>();
 
 
+            services.AddDistributedMemoryCache();
+            services.AddSession();
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
@@ -77,6 +81,7 @@ namespace WorkoutTracker
             app.UseAuthentication();
             app.UseAuthorization();
 
+            app.UseSession();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

@@ -71,31 +71,40 @@ namespace WorkoutTracker.Controllers
         public ActionResult Edit(int id)
         {
             Exercise exercise = _exerciseService.GetExercise(id);
-            return View(exercise);
+            IList<Workout> workouts = _workoutService.GetWorkouts();
+
+            ExerciseWorkout exerciseWorkout = new ExerciseWorkout();
+            foreach (var workout in workouts)
+            {
+                foreach (var e in workout.Exercises)
+                {
+                    if (e.ID == exercise.ID)
+                    {
+                        exerciseWorkout.ExerciseName = exercise.Name;
+                        exerciseWorkout.ID = exercise.ID;
+                        exerciseWorkout.Workout = workout.ID;
+                    }
+                }
+            }
+
+            return View(exerciseWorkout);
         }
 
         // POST: ExerciseController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(Exercise exercise)
+        public ActionResult Edit(ExerciseWorkout exerciseWorkout)
         {
             try
             {
-
-
-                _exerciseService.UpdateExercise(exercise);
-                IList<Workout> workouts = _workoutService.GetWorkouts();
-                foreach (var workout in workouts)
+                Exercise exercise = new Exercise()
                 {
-                    foreach (var e in workout.Exercises)
-                    {
-                        if (e.ID == exercise.ID)
-                        {
-                            return RedirectToAction("Details", "Workout", new { ID = workout.ID });
-                        }
-                    }
-                }
-                return RedirectToAction("Detail", "Workout");
+                    ID = exerciseWorkout.ID,
+                    Name = exerciseWorkout.ExerciseName,
+
+                };
+                _exerciseService.UpdateExercise(exercise);
+                return RedirectToAction("Details", "Workout", new { ID = exerciseWorkout.Workout });
             }
             catch
             {

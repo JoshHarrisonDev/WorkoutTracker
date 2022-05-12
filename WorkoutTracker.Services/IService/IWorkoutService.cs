@@ -18,5 +18,12 @@ namespace WorkoutTracker.Services.IService
         void UpdateWorkout(Workout workout);
 
         void DeleteWorkout(int ID);
+
+        IList<Workout> GetWorkoutsUser(int ID);
+
+        Workout GetWorkoutUser(int userID, int workoutID);
+
+        void AddWorkoutUser(User user, Workout workout);
+
     }
 }
