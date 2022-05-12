@@ -1,5 +1,6 @@
 ﻿@model WorkoutTracker.Data.Models.Workout
-
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
 @{
     ViewData["Title"] = "Details";
 }
@@ -80,5 +81,5 @@
 
 </div>
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="MyWorkouts" asp-route-id="@HttpContextAccessor.HttpContext.Session.GetInt32("UserID")">Back to List</a>
 </div>

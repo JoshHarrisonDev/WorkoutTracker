@@ -1,5 +1,6 @@
 ﻿@model WorkoutTracker.Data.Models.Workout
-
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
 @{
     ViewData["Title"] = "Delete";
 }
@@ -28,6 +29,6 @@
     <form asp-action="Delete">
         <input type="hidden" asp-for="ID" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
+        <a asp-action="MyWorkouts" asp-route-id="@HttpContextAccessor.HttpContext.Session.GetInt32("UserID")">Back to List</a>
     </form>
 </div>

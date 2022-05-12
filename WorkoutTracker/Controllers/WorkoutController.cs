@@ -14,10 +14,12 @@ namespace WorkoutTracker.Controllers
     {
         private IWorkoutService _workoutService;
         private IExerciseService _exerciseService;
-        public WorkoutController(IWorkoutService workoutService, IExerciseService exerciseService)
+        private IUserService _userService;
+        public WorkoutController(IWorkoutService workoutService, IExerciseService exerciseService, IUserService userService)
         {
             _workoutService = workoutService;
             _exerciseService = exerciseService;
+            _userService = userService;
 
         }
         // GET: WorkoutController
@@ -54,8 +56,11 @@ namespace WorkoutTracker.Controllers
         {
             try
             {
-                _workoutService.AddWorkout(workout);
-                return RedirectToAction(nameof(Index));
+
+
+                User user = _userService.GetUser((int)HttpContext.Session.GetInt32("UserID"));
+                _workoutService.AddWorkoutUser(user, workout);
+                return RedirectToAction("MyWorkouts", new { ID = HttpContext.Session.GetInt32("UserID") });
             }
             catch
             {
@@ -79,7 +84,7 @@ namespace WorkoutTracker.Controllers
             {
 
                 _workoutService.UpdateWorkout(workout);
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("MyWorkouts", new { ID = HttpContext.Session.GetInt32("UserID") });
             }
             catch
             {
@@ -102,7 +107,7 @@ namespace WorkoutTracker.Controllers
             try
             {
                 _workoutService.DeleteWorkout(id);
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("MyWorkouts", new { ID = HttpContext.Session.GetInt32("UserID") });
             }
             catch
             {
