@@ -51,18 +51,18 @@ namespace WorkoutTracker.Areas.Identity.Pages.Account
 
         public class InputModel
         {
-            [Required]
+
             [EmailAddress]
             public string Email { get; set; }
 
-            [Required]
+
             [DataType(DataType.Password)]
             public string Password { get; set; }
 
             [Display(Name = "Remember me?")]
             public bool RememberMe { get; set; }
 
-
+            public bool Guest { get; set; }
         }
 
         public async Task OnGetAsync(string returnUrl = null)
@@ -92,6 +92,23 @@ namespace WorkoutTracker.Areas.Identity.Pages.Account
             {
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
+                if (Input.Guest)
+                {
+                    Input.Email = "guest@guest.com";
+                    Input.Password = "!Password1";
+                    var guestResult = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+                    if (guestResult.Succeeded)
+                    {
+                        User user = _userService.GetUserByEmail(Input.Email);
+
+                        HttpContext.Session.SetInt32("UserID", user.ID);
+
+                        _logger.LogInformation("User logged in.");
+
+                        return RedirectToAction("MyWorkouts", "Workout", new { ID = HttpContext.Session.GetInt32("UserID") });
+                    }
+
+                }
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
